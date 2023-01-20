@@ -15,16 +15,26 @@ class ProductPage(BasePage):
         book_name = self.browser.find_element(*ProductPageLocators.BOOK_DESCRIPTION)
         msg_name = self.browser.find_element(*ProductPageLocators.SUCCESS_MESSAGE)
 
-        book_name_value = book_name.get_attribute("h1")
-        msg_name_value = msg_name.get_attribute("strong")
+        book_name_value = book_name.text
+        msg_name_value = msg_name.text
 
-        assert (book_name_value, msg_name_value), "book title message does not match actual title"
+        assert book_name_value == msg_name_value, "book title message does not match actual title"
 
     def should_be_correct_price_message(self):
         book_price = self.browser.find_element(*ProductPageLocators.BOOK_PRICE)
         msg_cart = self.browser.find_element(*ProductPageLocators.PRICE_MESSAGE)
 
         book_price_value = book_price.text
-        msg_cart_value = msg_cart.get_attribute("strong")
+        msg_cart = msg_cart.text
 
-        assert (book_price_value, msg_cart_value), "price message does not match actual price"
+        assert book_price_value in msg_cart, "price message does not match actual price"
+
+    def should_not_be_success_message(self):
+        assert self.is_not_element_present(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
+
+    def disappeared_success_message(self):
+        assert self.is_disappeared(*ProductPageLocators.SUCCESS_MESSAGE), \
+            "Success message is presented, but should not be"
+
+
